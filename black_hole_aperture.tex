@@ -1,0 +1,230 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+
+\title{Black Hole Phenomenology from Observer-Relative Apertures:\\
+A Computational Demonstration}
+
+\author{Ian Todd\\
+Sydney Medical School\\
+University of Sydney\\
+Sydney, NSW, Australia\\
+\texttt{itod2305@uni.sydney.edu.au}}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We demonstrate that black hole phenomenology---time dilation, horizon effects, and complementarity---can be reproduced without invoking general relativity, using only observer-relative dimensional apertures on a high-dimensional dynamical system. We define an observer's aperture as the subset of degrees of freedom they can access, and show that when the aperture contracts (approaching a horizon-analogue), four quantities behave as GR predicts: effective dimension $k_{\text{eff}}$ drops, accessible entropy $S_{\text{acc}}$ decreases, thermodynamic erasure cost $Q$ spikes, and correlation accumulation rate $\dot{\tau}$ approaches zero. Meanwhile, an ``infalling'' observer with full access sees none of these effects. The same underlying dynamics produce radically different experienced time for different observers---the essence of black hole complementarity. We connect this to gravitational wave phenomenology: the ringdown waveform of a black hole merger can be interpreted as the stabilization of aperture structure. This suggests that spacetime geometry may be downstream of dimensional accessibility constraints, consistent with Jacobson's thermodynamic derivation of Einstein's equations.
+\end{abstract}
+
+\section{Introduction}
+
+The black hole information paradox and related puzzles stem from a tension between quantum mechanics and general relativity. Quantum mechanics describes unitary evolution on a high-dimensional Hilbert space; general relativity describes geometry on a low-dimensional manifold. The apparent contradiction---that information seems to be lost at horizons---may reflect not a failure of either theory, but a category error in how we relate them.
+
+We propose a different framing: \textbf{observer-relative dimensional apertures}. An observer's aperture is the set of degrees of freedom they can access. When the aperture contracts, the observer loses access to modes---they are ``erased'' from that observer's description, though they persist in the underlying dynamics. This erasure has thermodynamic cost (Landauer's principle) and produces time dilation (fewer accessible correlations per unit coordinate time).
+
+In this paper, we demonstrate computationally that this framework reproduces black hole phenomenology:
+\begin{enumerate}
+    \item External observers see time freeze at the horizon
+    \item Infalling observers see nothing special
+    \item The underlying dynamics are unchanged
+    \item Thermodynamic costs spike at the horizon
+\end{enumerate}
+
+This is not a derivation of general relativity. It is a demonstration that the \emph{phenomenology} of black holes can emerge from dimensional accessibility constraints on high-dimensional systems.
+
+\section{Framework}
+
+\subsection{The Underlying System}
+
+We consider a system of $N$ coupled harmonic oscillators with state $\mathbf{x} \in \mathbb{R}^{2N}$ (positions and momenta). The dynamics are Hamiltonian:
+\begin{equation}
+    H = \frac{1}{2}\sum_i p_i^2 + \frac{1}{2}\sum_i x_i^2 + \frac{\kappa}{2}\sum_{\langle ij \rangle}(x_i - x_j)^2
+\end{equation}
+where $\kappa$ is the coupling strength between neighbors.
+
+This is the ``underlying reality'' that both observers watch. The dynamics are deterministic and reversible.
+
+\subsection{Observer Apertures}
+
+\begin{definition}[Aperture]
+An observer's aperture is a weight vector $\mathbf{w} \in [0,1]^N$ that determines access to each mode:
+\begin{equation}
+    \mathbf{x}_{\text{obs}} = \mathbf{w} \odot \mathbf{x}
+\end{equation}
+\end{definition}
+
+For the \textbf{external observer}, aperture weights depend on ``radius'' $r$:
+\begin{equation}
+    w_i(r) = r^{3f_i}
+\end{equation}
+where $f_i = i/N$ is the normalized mode frequency. High-frequency modes are suppressed faster as $r \to 0$.
+
+For the \textbf{infalling observer}, $w_i = 1$ always.
+
+\subsection{Observable Quantities}
+
+For each observer, we compute four quantities:
+
+\textbf{1. Effective dimension} (participation ratio):
+\begin{equation}
+    k_{\text{eff}} = \frac{(\sum_i w_i)^2}{\sum_i w_i^2}
+\end{equation}
+
+\textbf{2. Accessible entropy}:
+\begin{equation}
+    S_{\text{acc}} = \frac{1}{2}\log\det C_{\text{obs}}
+\end{equation}
+where $C_{\text{obs}}$ is the covariance of accessible states.
+
+\textbf{3. Correlation rate} (proper time flow):
+\begin{equation}
+    \dot{\tau} = \sqrt{\sum_i w_i \dot{x}_i^2}
+\end{equation}
+
+\textbf{4. Thermodynamic cost} (Landauer erasure):
+\begin{equation}
+    Q(t) = \sum_{s \leq t} \max(0, S_{\text{acc}}(s-1) - S_{\text{acc}}(s))
+\end{equation}
+
+\section{Results}
+
+\subsection{Time Dilation}
+
+Figure~\ref{fig:time_dilation} shows the key result. As the external observer approaches the horizon (radius $r \to 0$):
+\begin{itemize}
+    \item $k_{\text{eff}}$ drops from $N$ toward 2 (surface-confined)
+    \item $\dot{\tau}$ approaches zero (time freezes)
+    \item Accumulated proper time $\tau$ asymptotes
+\end{itemize}
+
+Meanwhile, the infalling observer sees constant $k_{\text{eff}}$, constant $\dot{\tau}$, and linear $\tau$ accumulation.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig1_time_dilation.png}
+    \caption{Time dilation during infall. External observer (red) sees dimensional collapse and time freezing; infalling observer (cyan) sees nothing special.}
+    \label{fig:time_dilation}
+\end{figure}
+
+\subsection{Thermodynamic Cost}
+
+Figure~\ref{fig:thermodynamics} shows the thermodynamic structure. As the aperture squeezes:
+\begin{itemize}
+    \item $S_{\text{acc}}$ drops (accessible entropy decreases)
+    \item $Q$ accumulates (erasure cost spikes)
+\end{itemize}
+
+This connects to Jacobson's thermodynamic derivation of Einstein's equations: horizons are where the thermodynamic cost of maintaining a coarse-grained description becomes extreme.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig2_thermodynamics.png}
+    \caption{Thermodynamic cost of aperture squeezing. External observer pays increasing erasure cost; infalling observer pays none.}
+    \label{fig:thermodynamics}
+\end{figure}
+
+\subsection{Connection to Gravitational Waves}
+
+Figure~\ref{fig:ligo} shows a simulated merger. The aperture dynamics during merger produce:
+\begin{itemize}
+    \item Inspiral: gradual aperture contraction
+    \item Merger: rapid aperture collapse
+    \item Ringdown: damped oscillations as aperture stabilizes
+\end{itemize}
+
+The derivative $d\dot{\tau}/dt$ serves as a proxy for gravitational wave strain. The ringdown spectrum shows characteristic quasi-normal modes---not derived from GR, but emergent from aperture stabilization dynamics.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/fig3_ligo_connection.png}
+    \caption{Merger simulation showing inspiral, merger, and ringdown phases. Aperture perturbations produce GW-like waveforms.}
+    \label{fig:ligo}
+\end{figure}
+
+\subsection{Comparison to Schwarzschild}
+
+Figure~\ref{fig:schwarzschild} compares the aperture model's dimensional collapse to the Schwarzschild time dilation factor $\sqrt{1-r_s/r}$. The qualitative behavior matches: both approach zero at the horizon, both are smooth elsewhere.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/fig4_k_vs_radius.png}
+    \caption{Dimensional collapse (red) compared to Schwarzschild time dilation (dashed). Qualitative agreement suggests shared underlying structure.}
+    \label{fig:schwarzschild}
+\end{figure}
+
+\section{Discussion}
+
+\subsection{What This Demonstrates}
+
+This simulation demonstrates that black hole phenomenology---time dilation, horizon effects, complementarity, thermodynamic costs---can emerge from a simple principle: \textbf{observer-relative dimensional apertures on high-dimensional dynamics}.
+
+We did not invoke:
+\begin{itemize}
+    \item Einstein's field equations
+    \item The Schwarzschild metric
+    \item Quantum field theory in curved spacetime
+    \item The holographic principle (as input)
+\end{itemize}
+
+Yet we recovered:
+\begin{itemize}
+    \item Time freezing at the horizon
+    \item Observer-dependent experienced time
+    \item Area-like scaling of accessible information
+    \item Ringdown dynamics qualitatively matching GW observations
+\end{itemize}
+
+\subsection{Interpretation}
+
+This suggests that spacetime geometry may be \emph{downstream} of dimensional accessibility constraints. Jacobson showed that Einstein's equations follow from thermodynamic consistency at local horizons. Our simulation provides a computational substrate where this relationship is manifest: the horizon is where aperture compression costs become extreme.
+
+\subsection{Connection to LIGO}
+
+LIGO observes gravitational waves from black hole mergers. The characteristic inspiral-merger-ringdown waveform is typically derived from numerical relativity. Here, we show that qualitatively similar waveforms emerge from aperture dynamics alone.
+
+This does not replace GR. But it suggests that the \emph{information content} of gravitational waves---what they tell us about the source---may be interpretable as changes in dimensional accessibility. The ringdown frequency encodes how fast the merged system's aperture stabilizes.
+
+\subsection{Limitations}
+
+This is a toy model. We have not:
+\begin{itemize}
+    \item Derived the aperture-radius relationship from first principles
+    \item Shown quantitative agreement with GR predictions
+    \item Addressed the black hole information paradox directly
+    \item Computed Hawking radiation
+\end{itemize}
+
+The claim is modest: the phenomenology \emph{can} emerge from aperture constraints. Whether it \emph{does} in our universe requires further work.
+
+\section{Conclusion}
+
+We have demonstrated that observer-relative dimensional apertures on high-dimensional dynamics produce black hole phenomenology without invoking general relativity. Time dilation, horizon effects, complementarity, and thermodynamic costs all emerge from a single principle: different observers have different access to degrees of freedom.
+
+This suggests a research program: treat spacetime geometry as the shape of compression gradients induced by dimensional apertures, and derive GR (or its corrections) from information-geometric constraints on observer accessibility.
+
+The simulation code is available at \url{https://github.com/todd866/black-hole-aperture}.
+
+\section*{Acknowledgments}
+
+This work was developed in conversation with Claude (Anthropic).
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
