@@ -122,40 +122,53 @@ An observer's aperture is a weight vector $\mathbf{w} \in [0,1]^N$ determining a
 \begin{equation}
     \mathbf{x}_{\mathrm{obs}} = \mathbf{w} \odot \mathbf{x}
 \end{equation}
-The effective dimension is the participation ratio:
-\begin{equation}
-    k_{\mathrm{eff}} = \frac{(\sum_i w_i)^2}{\sum_i w_i^2}
-\end{equation}
 \end{definition}
 
-For a uniform aperture ($w_i = 1$), $k_{\mathrm{eff}} = N$. As weights concentrate on fewer modes, $k_{\mathrm{eff}}$ drops toward 1.
+We distinguish two measures of effective dimension:
+
+\textbf{Channel participation} (from weights alone):
+\begin{equation}
+    k_{w} = \frac{(\sum_i w_i)^2}{\sum_i w_i^2}
+\end{equation}
+
+\textbf{Dynamical dimension} (from observed state statistics):
+\begin{equation}
+    k_{\mathrm{dyn}} = \frac{(\sum_j \lambda_j)^2}{\sum_j \lambda_j^2}
+\end{equation}
+where $\{\lambda_j\}$ are eigenvalues of the observed covariance $C_{\mathrm{obs}}$.
+
+For a uniform aperture ($w_i = 1$), $k_w = N$. As weights concentrate on fewer modes, $k_w$ drops. The key prediction is that $k_{\mathrm{dyn}}$ tracks $k_w$: aperture squeezing reduces the dynamical complexity of the observed state, not just the number of accessible channels.
 
 \subsection{Time as Information Rate}
 
-Define the correlation accumulation rate:
+We treat the aperture weights as defining an induced metric $G = \mathrm{diag}(w_1, \ldots, w_N)$ on the observer's state space. The correlation accumulation rate is then the geodesic speed:
 \begin{equation}
-    \dot{\tau} = \sqrt{\sum_i w_i \dot{x}_i^2}
+    \dot{\tau} = \sqrt{\sum_i w_i \dot{x}_i^2} = \sqrt{\dot{\mathbf{x}}^T G \dot{\mathbf{x}}}
 \end{equation}
 
-This measures how fast the observer's accessible state changes. When $\mathbf{w} \to 0$, $\dot{\tau} \to 0$: time stops.
+This measures how fast the observer's accessible state changes. When $\mathbf{w} \to 0$, the metric degenerates and $\dot{\tau} \to 0$: time stops.
 
-This is not metaphor. The Fisher information metric on state space determines the maximum rate of distinguishable state change [2]. Contracting the aperture contracts the accessible Fisher volume, reducing the geodesic speed through state space. Time literally slows because fewer distinguishable states can be traversed per unit coordinate time.
+This connects to information geometry [2]: the Fisher metric determines the maximum rate of distinguishable state change. Contracting the aperture contracts the accessible Fisher volume, reducing geodesic speed through state space. Time slows because fewer distinguishable states can be traversed per unit coordinate time.
 
 \subsection{Thermodynamic Cost}
 
-When the aperture squeezes, degrees of freedom are traced out---information is erased. Landauer's principle [3] requires:
+When the aperture squeezes, degrees of freedom are traced out---information is erased. Landauer's principle [3] requires minimum heat dissipation:
 \begin{equation}
-    Q \geq k_{\mathrm{B}}T \cdot \Delta S_{\mathrm{erased}}
+    Q_{\mathrm{heat}} \geq k_{\mathrm{B}}T \ln 2 \cdot \Delta I_{\mathrm{erased}}
 \end{equation}
+where $\Delta I$ is measured in bits.
 
-We track:
+We track a \textbf{Landauer proxy} (in nats, dimensionless):
 \begin{equation}
-    S_{\mathrm{acc}} = \frac{1}{2}\log\det C_{\mathrm{obs}}
+    S_{\mathrm{acc}} = \frac{1}{2}\log\det (C_{\mathrm{obs}} + \epsilon I)
 \end{equation}
-where $C_{\mathrm{obs}}$ is the covariance of accessible states, and:
+where $C_{\mathrm{obs}}$ is the covariance of accessible states and $\epsilon$ is a regularization constant. This is a log-volume measure (differential entropy up to a constant), not Shannon entropy; it can be negative.
+
+The cumulative erasure proxy:
 \begin{equation}
     Q(t) = \sum_{s \leq t} \max(0, S_{\mathrm{acc}}(s-1) - S_{\mathrm{acc}}(s))
 \end{equation}
+To obtain physical heat, multiply by $k_{\mathrm{B}}T$ and convert units.
 
 This connects to [4]: maintaining a low-dimensional description of a high-dimensional system requires work. Horizons are where this work diverges.
 
@@ -182,12 +195,12 @@ High-frequency modes are suppressed faster as $r \to 0$ (approaching horizon).
 
 Figure~\ref{fig:time_dilation} shows the key result. As the external observer's radius decreases:
 \begin{itemize}
-    \item $k_{\mathrm{eff}}$ drops from $\sim$20 to $\sim$3
+    \item Both $k_w$ and $k_{\mathrm{dyn}}$ drop (channel participation tracks dynamical dimension)
     \item $\dot{\tau}$ drops proportionally
     \item Accumulated proper time $\tau$ asymptotes
 \end{itemize}
 
-The infalling observer sees constant $k_{\mathrm{eff}}$, constant $\dot{\tau}$, linear $\tau$. Same dynamics, different apertures, different clocks.
+The infalling observer sees constant $k_{\mathrm{dyn}}$, constant $\dot{\tau}$, linear $\tau$. Same dynamics, different apertures, different clocks.
 
 \begin{figure}[H]
     \centering
@@ -220,23 +233,23 @@ Figure~\ref{fig:ligo} shows a simulated merger. The aperture dynamics produce:
     \item \textbf{Ringdown}: damped oscillations as aperture stabilizes
 \end{itemize}
 
-The ringdown frequency encodes the merged system's dimensional structure. This suggests gravitational wave phenomenology may be interpretable as aperture dynamics.
+If spacetime geometry reflects information accessibility, then gravitational waves are oscillations in channel capacity. The ringdown frequency would encode how fast the merged system's aperture stabilizes.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{fig3_ligo_connection.png}
-    \caption{Merger simulation. Aperture perturbations produce inspiral-merger-ringdown structure qualitatively matching LIGO observations [5].}
+    \caption{Merger simulation. Aperture perturbations produce inspiral-merger-ringdown structure with qualitative similarity to LIGO waveforms [5]. This is a shape comparison; we do not derive GR predictions.}
     \label{fig:ligo}
 \end{figure}
 
 \subsection{Comparison to Schwarzschild}
 
-Figure~\ref{fig:schwarzschild} compares our aperture-based $k_{\mathrm{eff}}/k_{\mathrm{max}}$ to the Schwarzschild time dilation factor $\sqrt{1-r_s/r}$. The qualitative behavior matches: both approach zero at the horizon, both are smooth elsewhere.
+Figure~\ref{fig:schwarzschild} compares our aperture-based $k_{\mathrm{dyn}}/k_{\mathrm{max}}$ to the Schwarzschild time dilation factor $\sqrt{1-r_s/r}$. The qualitative behavior matches: both approach zero at the horizon, both are smooth elsewhere. This is a shape comparison only; we do not derive the Schwarzschild factor, and many monotone functions share this qualitative behavior.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{fig4_k_vs_radius.png}
-    \caption{Dimensional collapse (solid) vs Schwarzschild time dilation (dashed). Qualitative agreement suggests shared underlying structure.}
+    \caption{Dimensional collapse (solid) vs Schwarzschild time dilation (dashed). Qualitative similarity; not a derivation.}
     \label{fig:schwarzschild}
 \end{figure}
 
@@ -244,20 +257,22 @@ Figure~\ref{fig:schwarzschild} compares our aperture-based $k_{\mathrm{eff}}/k_{
 
 \subsection{What This Demonstrates}
 
-We have shown that black hole phenomenology emerges from a simple principle: \textbf{observer-relative dimensional apertures on high-dimensional dynamics}.
+We have shown that \textbf{horizon-like phenomenology} emerges from observer-relative dimensional apertures on high-dimensional dynamics.
 
 Without invoking Einstein's equations, we recovered:
 \begin{itemize}
-    \item Time freezing at the horizon
-    \item Observer-dependent experienced time (complementarity)
-    \item Area-like scaling of accessible information
+    \item Time freezing at a boundary (horizon-analogue)
+    \item Observer-dependent experienced time (complementarity-like)
+    \item Boundary-dominated access (area-like scaling)
     \item Thermodynamic costs spiking at boundaries
-    \item Ringdown dynamics matching GW observations
+    \item Ringdown-like dynamics after perturbation
 \end{itemize}
+
+The key observation: we defined the aperture constraint, but the \emph{consequences}---thermodynamics, time dilation, complementarity---emerged naturally without being programmed in.
 
 \subsection{Interpretation}
 
-This suggests spacetime geometry may be \emph{downstream} of dimensional accessibility constraints. Jacobson [1] showed Einstein's equations follow from thermodynamic consistency at horizons. Our simulation provides a computational substrate where this is manifest: the horizon is where aperture compression becomes infinitely costly.
+This is a computational demonstration, not a claim that spacetime \emph{is} information geometry. But if Jacobson [1] is right that Einstein's equations follow from thermodynamic consistency at horizons, then our simulation provides a substrate where this is manifest: the horizon is where aperture compression cost diverges.
 
 The relationship is:
 \begin{center}
